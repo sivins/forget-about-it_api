@@ -10,7 +10,7 @@ export class UserRoutes {
     routes(app: express.Application): void {
         const router = express.Router();
     
-        router.get('/user-details/:username', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+        router.get('/:username', function(req: express.Request, res: express.Response, next: express.NextFunction) {
             res.locals.connection.query('SELECT * FROM User WHERE UserName = ?;', req.params.username, function (userError, userResults, userFields) {
                 if (userError) throw userError;
 

@@ -1,5 +1,4 @@
 import * as express from 'express';
-import { User } from 'models/user';
 import { Purchase } from 'models/purchase';
 import * as mysql from 'mysql';
 
@@ -10,17 +9,24 @@ export class PurchaseRoutes {
     routes(app: express.Application): void {
         const router = express.Router();
 
-        router.put('/purchase/:purchase', function(req: express.Request, res: express.Response, next: express.NextFunction) {
-            const purchase: Purchase = req.params.purchase;
+        router.put('/', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+            const purchase: Purchase = req.body;
 
             if (!purchase || !purchase.AccountId || !purchase.UserId || !purchase.Amount) {
                 throw 'Invalid purchase object';
             }
 
-            const query = mysql.escape(`
+            const query = `
                 INSERT INTO Purchase (UserId, PurchaseCategoryId, AccountId, Description, Amount, PurchaseDate, EnteredStamp)
-                VALUES (${purchase.UserId}, ${purchase.PurchaseCategoryId}, ${purchase.AccountId}, ${purchase.Description}, ${purchase.Amount}, ${purchase.PurchaseDate}, CURRENT_TIMESTAMP());
-            `);
+                VALUES (
+                    ${mysql.escape(purchase.UserId)},
+                    ${mysql.escape(purchase.PurchaseCategoryId)},
+                    ${mysql.escape(purchase.AccountId)},
+                    ${mysql.escape(purchase.Description)},
+                    ${mysql.escape(purchase.Amount)},
+                    ${mysql.escape(purchase.PurchaseDate)},
+                    CURRENT_TIMESTAMP());
+                `;
 
             res.locals.connection.query(query, req.params.username, function (err, results, fields) {
                 if (err) throw err;
@@ -29,22 +35,22 @@ export class PurchaseRoutes {
             });
         });
 
-        router.patch('/purchase/:purchase', function(req: express.Request, res: express.Response, next: express.NextFunction) {
-            const purchase: Purchase = req.params.purchase;
+        router.patch('/', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+            const purchase: Purchase = req.body;
 
             if (!purchase || !purchase.PurchaseId || !purchase.AccountId || !purchase.UserId || !purchase.Amount) {
                 throw 'Invalid purchase object';
             }
 
-            const query = mysql.escape(`
-                UPDATE Purchase SET 
-                    PurchaseCategoryId = ${purchase.PurchaseCategoryId},
-                    Description = ${purchase.Description},
-                    Amount = ${purchase.Amount},
-                    PurchaseDate = ${purchase.PurchaseDate},
-                    UpdatedStamp = ${purchase.UpdatedStamp}
-                WHERE PurchaseId = ${purchase.PurchaseId}
-            `);
+            const query = `
+                UPDATE Purchase SET
+                    PurchaseCategoryId = ${mysql.escape(purchase.PurchaseCategoryId)},
+                    Description = ${mysql.escape(purchase.Description)},
+                    Amount = ${mysql.escape(purchase.Amount)},
+                    PurchaseDate = ${mysql.escape(purchase.PurchaseDate)},
+                    UpdatedStamp = CURRENT_TIMESTAMP()
+                WHERE PurchaseId = ${mysql.escape(purchase.PurchaseId)}
+            `;
 
             res.locals.connection.query(query, req.params.username, function (err, results, fields) {
                 if (err) throw err;
@@ -53,13 +59,10 @@ export class PurchaseRoutes {
             });
         });
 
-        router.delete('/purchase/:purchaseId', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+        router.delete('/:purchaseId', function(req: express.Request, res: express.Response, next: express.NextFunction) {
             if (!req.params.purchaseId) throw 'Invalid PurchaseId';
 
-            const query = mysql.escape(`
-                DELETE FROM Purchase
-                WHERE PurchaseId = ${req.params.purchaseId}
-            `);
+            const query = `DELETE FROM Purchase WHERE PurchaseId = ${mysql.escape(req.params.purchaseId)}`;
 
             res.locals.connection.query(query, req.params.username, function (err, results, fields) {
                 if (err) throw err;
