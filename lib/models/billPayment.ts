@@ -7,6 +7,7 @@ export class BillPayment {
     Account: string;
     CheckingAccountTransactionId: string;
     PaidDate: Date;
+    Amount: number;
     ConfirmationNumber: string;
     Notes: string;
     EnteredStamp: Date;
