@@ -74,3 +74,4 @@ typings/
 
 # Secret configurations
 config.js
+config.json
