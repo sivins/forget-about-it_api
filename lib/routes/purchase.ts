@@ -1,6 +1,5 @@
 import * as express from 'express';
 import { Purchase } from 'models/purchase';
-import * as mysql from 'mysql';
 
 export class PurchaseRoutes {
 
@@ -9,6 +8,7 @@ export class PurchaseRoutes {
     routes(app: express.Application): void {
         const router = express.Router();
 
+        /*
         router.put('/', function(req: express.Request, res: express.Response, next: express.NextFunction) {
             const purchase: Purchase = req.body;
 
@@ -71,6 +71,7 @@ export class PurchaseRoutes {
             });
         });
 
+        */
         app.use('/api/v1/purchase/', router);
     }
 }

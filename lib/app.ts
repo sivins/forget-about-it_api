@@ -1,7 +1,5 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import * as mysql from 'mysql';
-import * as config from '../config';
 import { Routes } from './routes';
 
 export class App {
@@ -12,7 +10,7 @@ export class App {
     constructor() {
         this.app = express();
         this.config();
-        this.connectDb();
+
         this.routesModule.routes(this.app);
     }
 
@@ -41,26 +39,6 @@ export class App {
             // Pass to next layer of middleware
             next();
         });
-    }
-
-    private connectDb(): void {
-        this.app.use(function (req, res, next) {
-            res.locals.connection = mysql.createConnection(config.mysql_connection);
-            res.locals.connection.connect();
-            next();
-        });
-    }
-
-    private routes(): void {
-        const router = express.Router();
-    
-        router.get('/', function(req: express.Request, res: express.Response, next: express.NextFunction) {
-            res.status(200).send({
-                message: 'Hello World!'
-            })
-        });
-
-        this.app.use('/', router)
     }
 }
 

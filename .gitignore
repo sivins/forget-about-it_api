@@ -75,3 +75,4 @@ typings/
 # Secret configurations
 config.js
 config.json
+config.ts

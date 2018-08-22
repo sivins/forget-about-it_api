@@ -1,7 +1,4 @@
 import * as express from 'express';
-import { User } from 'models/user';
-import { Purchase } from 'models/purchase';
-import * as mysql from 'mysql';
 import { UserRoutes } from './user';
 import { PurchaseRoutes } from './purchase';
 
