@@ -14,20 +14,15 @@ export class UserRoutes {
                 console.log(user);
 
                 db.user.details(user.UserId).then((details) => {
-                    const todos = details[0];
-                    const groceries = details[1];
-                    const bills = details[2];
-                    const billPayments = details[3];
-                    const accounts = details[4];
-                    const purchases = details[5];
+                    console.log(details);
 
+                    user.ToDos = details[0];
+                    user.Groceries = details[1];
+                    user.Bills = details[2];
+                    user.BillPayments = details[3];
+                    user.Accounts = details[4];
+                    user.Purchases = details[5];
                     user.Password = '';
-                    user.ToDos = todos;
-                    user.Groceries = groceries;
-                    user.Bills = bills;
-                    user.BillPayments = billPayments;
-                    user.Accounts = accounts;
-                    user.Purchases = purchases;
 
                     res.status(200).send(user);
                 });

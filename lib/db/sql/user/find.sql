@@ -1,1 +1,1 @@
-SELECT * FROM public.user WHERE user.UserName = $1;
+SELECT * FROM public."user" WHERE "user"."UserName" = $1;
